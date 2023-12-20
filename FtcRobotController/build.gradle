@@ -10,17 +10,30 @@ android {
     defaultConfig {
         minSdkVersion 24
         //noinspection ExpiredTargetSdkVersion
-        targetSdkVersion 28
+        targetSdkVersion 34
         buildConfigField "String", "APP_BUILD_TIME", '"' + (new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.ROOT).format(new Date())) + '"'
     }
 
-    compileSdkVersion 29
+    compileSdk 34
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
     namespace = 'com.qualcomm.ftcrobotcontroller'
+    android.buildFeatures.buildConfig true
+}
+/*
+dependencies {
+    implementation project(path: ':FtcDashboard') //this chunck mightttt not be necessary
+
+
 }
 
+repositories {
+    flatDir { // this chunck too
+        dirs '../libs'
+    }
+}
+*/
 apply from: '../build.dependencies.gradle'

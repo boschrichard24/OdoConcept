@@ -3,6 +3,9 @@
  *
  * It is extraordinarily rare that you will ever need to edit this file.
  */
+configurations {
+    doc { transitive false }
+}
 
 buildscript {
     ext.dashboard_version = '0.4.14'
@@ -14,7 +17,7 @@ buildscript {
     }
     dependencies {
         // Note for FTC Teams: Do not modify this yourself.
-        classpath 'com.android.tools.build:gradle:7.2.0'
+        classpath 'com.android.tools.build:gradle:8.2.0'
     }
 }
 
@@ -29,4 +32,38 @@ allprojects {
 
 repositories {
     mavenCentral()
+
+    flatDir {
+        dirs '../libs'
+    }
+}
+
+dependencies {
+    doc 'org.firstinspires.ftc:Hardware:9.0.1'
+    doc 'org.firstinspires.ftc:RobotCore:9.0.1'
+    doc 'org.firstinspires.ftc:FtcCommon:9.0.1'
+    doc 'org.firstinspires.ftc:OnBotJava:9.0.1'
+    doc 'org.firstinspires.ftc:Inspection:9.0.1'
+}
+
+tasks.register('extractJavadoc') {
+    doLast {
+        def componentIds = configurations.doc.incoming.resolutionResult.allDependencies.collect { it.selected.id }
+
+        def result = dependencies.createArtifactResolutionQuery()
+                .forComponents(componentIds)
+                .withArtifacts(JvmLibrary, SourcesArtifact, JavadocArtifact)
+                .execute()
+
+        for (component in result.resolvedComponents) {
+            component.getArtifacts(JavadocArtifact).each { artifact ->
+                def version = artifact.identifier.componentIdentifier.version
+                def libName = artifact.identifier.componentIdentifier.moduleIdentifier.name
+                copy {
+                    from zipTree(artifact.file)
+                    into "docs/$version/$libName/"
+                }
+            }
+        }
+    }
 }

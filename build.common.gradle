@@ -21,7 +21,7 @@ apply plugin: 'com.android.application'
 
 android {
 
-    compileSdkVersion 29
+    compileSdk 34
 
     signingConfigs {
         release {
@@ -56,7 +56,7 @@ android {
         applicationId 'com.qualcomm.ftcrobotcontroller'
         minSdkVersion 24
         //noinspection ExpiredTargetSdkVersion
-        targetSdkVersion 28
+        targetSdkVersion 34
 
         /**
          * We keep the versionCode and versionName of robot controller applications in sync with
@@ -94,6 +94,12 @@ android {
 
             ndk {
                 abiFilters "armeabi-v7a", "arm64-v8a"
+                if (useProguard) {
+                    minifyEnabled true
+                    proguardFiles getDefaultProguardFile('proguard-android.txt'),
+                            'proguard-rules.pro'
+                    println(getProguardFiles())
+                }
             }
         }
         debug {
@@ -102,12 +108,19 @@ android {
             ndk {
                 abiFilters "armeabi-v7a", "arm64-v8a"
             }
+
+            if (useProguard) {
+                minifyEnabled true
+                proguardFiles getDefaultProguardFile('proguard-android.txt'),
+                        'proguard-rules.pro'
+                println(getProguardFiles())
+            }
         }
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
     packagingOptions {
@@ -121,5 +134,8 @@ android {
 }
 
 repositories {
+    flatDir {
+        dirs rootProject.file('libs')
+    }
 }
 
