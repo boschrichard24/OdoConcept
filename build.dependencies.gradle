@@ -26,5 +26,8 @@ dependencies {
     runtimeOnly 'org.tensorflow:tensorflow-lite:2.14.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'
 
+    implementation 'com.acmerobotics.dashboard:dashboard:0.4.14'
+
+
     implementation project(':FtcDashboard')
 }

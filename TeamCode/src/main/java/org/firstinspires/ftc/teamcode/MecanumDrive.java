@@ -32,6 +32,7 @@ import com.acmerobotics.roadrunner.ftc.PositionVelocityPair;
 import com.acmerobotics.roadrunner.ftc.RawEncoder;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -62,8 +63,8 @@ public final class MecanumDrive {
                 RevHubOrientationOnRobot.UsbFacingDirection.FORWARD;
 
         // drive model parameters
-        public double inPerTick = 0;
-        public double lateralInPerTick = 1;
+        public double inPerTick = 39/489.75;
+        public double lateralInPerTick = 39/2861.2;
         public double trackWidthTicks = 0;
 
         // feedforward parameters (in tick units)
@@ -105,8 +106,9 @@ public final class MecanumDrive {
     public final AccelConstraint defaultAccelConstraint =
             new ProfileAccelConstraint(PARAMS.minProfileAccel, PARAMS.maxProfileAccel);
 
-    public final DcMotorEx leftFront, leftBack, rightBack, rightFront;
+    public final DcMotorEx leftFront, leftBack, rightBack, rightFront, armMotorOne, armMotorTwo, Intake;
 
+    public final CRServo armServo;
     public final VoltageSensor voltageSensor;
 
     public final IMU imu;
@@ -201,15 +203,25 @@ public final class MecanumDrive {
 
         // TODO: make sure your config has motors with these names (or change them)
         //   see https://ftc-docs.firstinspires.org/en/latest/hardware_and_software_configuration/configuring/index.html
-        leftFront = hardwareMap.get(DcMotorEx.class, "leftFront");
-        leftBack = hardwareMap.get(DcMotorEx.class, "leftBack");
-        rightBack = hardwareMap.get(DcMotorEx.class, "rightBack");
-        rightFront = hardwareMap.get(DcMotorEx.class, "rightFront");
+        leftFront = hardwareMap.get(DcMotorEx.class, "lfD");
+        leftBack = hardwareMap.get(DcMotorEx.class, "lbD");
+        rightBack = hardwareMap.get(DcMotorEx.class, "rbD");
+        rightFront = hardwareMap.get(DcMotorEx.class, "rfD");
+
+        armMotorOne = hardwareMap.get(DcMotorEx.class, "arm_1");
+        armMotorTwo = hardwareMap.get(DcMotorEx.class, "arm_2");
+        Intake = hardwareMap.get(DcMotorEx.class, "intake");
+        armServo = hardwareMap.get(CRServo.class, "servo");
+
+        rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightBack.setDirection(DcMotorSimple.Direction.REVERSE);
 
         leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        armMotorOne.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        armMotorTwo.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         // TODO: reverse motor directions if needed
         //   leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -371,6 +383,7 @@ public final class MecanumDrive {
                 leftBack.setPower(0);
                 rightBack.setPower(0);
                 rightFront.setPower(0);
+                
 
                 return false;
             }
