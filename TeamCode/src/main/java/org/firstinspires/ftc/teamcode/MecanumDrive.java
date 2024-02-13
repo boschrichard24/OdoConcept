@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+
 import androidx.annotation.NonNull;
 
 import com.acmerobotics.dashboard.canvas.Canvas;
@@ -32,12 +33,14 @@ import com.acmerobotics.roadrunner.ftc.PositionVelocityPair;
 import com.acmerobotics.roadrunner.ftc.RawEncoder;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -60,26 +63,28 @@ public final class MecanumDrive {
         public RevHubOrientationOnRobot.LogoFacingDirection logoFacingDirection =
                 RevHubOrientationOnRobot.LogoFacingDirection.UP;
         public RevHubOrientationOnRobot.UsbFacingDirection usbFacingDirection =
-                RevHubOrientationOnRobot.UsbFacingDirection.FORWARD;
+                RevHubOrientationOnRobot.UsbFacingDirection.BACKWARD;
+
+
 
         // drive model parameters
-        public double inPerTick = 39/489.75;
-        public double lateralInPerTick = 39/2861.2;
-        public double trackWidthTicks = 0;
+        public double inPerTick = 39/489.75;//26.276;; //326.276;//9.0/6645;
+        public double lateralInPerTick = 39/2861.2;;//26.276;//39/3310.0;//90.5696;
+        public double trackWidthTicks = 236.484;//3031.52;//407.556;
 
         // feedforward parameters (in tick units)
-        public double kS = 0;
-        public double kV = 0;
-        public double kA = 0;
+        public double kS = 0;//0.322;
+        public double kV = 1 / (312 * 1 * 2 * Math.PI * 1.8898 / 60.0);;//0.00425;
+        public double kA = 0;//0.000385;
 
         // path profile parameters (in inches)
-        public double maxWheelVel = 50;
-        public double minProfileAccel = -30;
-        public double maxProfileAccel = 50;
+        public double maxWheelVel = 52.48291908330528;
+        public double minProfileAccel = -30;//-52.48291908330528;
+        public double maxProfileAccel = 52.48291908330528;
 
         // turn profile parameters (in radians)
-        public double maxAngVel = Math.PI; // shared with path
-        public double maxAngAccel = Math.PI;
+        public double maxAngVel =  Math.toRadians(334.11664); // shared with path
+        public double maxAngAccel =  Math.toRadians(334.11664); //Math.pi (original)
 
         // path controller gains
         public double axialGain = 0.0;
@@ -108,7 +113,7 @@ public final class MecanumDrive {
 
     public final DcMotorEx leftFront, leftBack, rightBack, rightFront, armMotorOne, armMotorTwo, Intake;
 
-    public final CRServo armServo;
+    public final Servo armServo;
     public final VoltageSensor voltageSensor;
 
     public final IMU imu;
@@ -136,7 +141,8 @@ public final class MecanumDrive {
             rightFront = new OverflowEncoder(new RawEncoder(MecanumDrive.this.rightFront));
 
             // TODO: reverse encoders if needed
-            // leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
+            leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
+            //rightBack.setDirection(DcMotorSimple.Direction.REVERSE);
 
             lastLeftFrontPos = leftFront.getPositionAndVelocity().position;
             lastLeftBackPos = leftBack.getPositionAndVelocity().position;
@@ -211,7 +217,9 @@ public final class MecanumDrive {
         armMotorOne = hardwareMap.get(DcMotorEx.class, "arm_1");
         armMotorTwo = hardwareMap.get(DcMotorEx.class, "arm_2");
         Intake = hardwareMap.get(DcMotorEx.class, "intake");
-        armServo = hardwareMap.get(CRServo.class, "servo");
+        armServo = hardwareMap.get(Servo.class, "servo");
+
+
 
         rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
         rightBack.setDirection(DcMotorSimple.Direction.REVERSE);
