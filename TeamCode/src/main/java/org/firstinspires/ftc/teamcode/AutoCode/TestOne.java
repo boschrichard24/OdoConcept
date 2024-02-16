@@ -1,17 +1,16 @@
-package org.firstinspires.ftc.teamcode.tuning;
-
-import android.icu.text.StringSearch;
+package org.firstinspires.ftc.teamcode.AutoCode;
 
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
-import org.firstinspires.ftc.teamcode.TankDrive;
+import org.firstinspires.ftc.teamcode.tuning.TuningOpModes;
 
-public final class SplineTest extends LinearOpMode {
+@Autonomous(name="TestOne", group="CompetitionAuto")
+public class TestOne extends AutoSupplies {
 
 
     @Override
@@ -20,25 +19,17 @@ public final class SplineTest extends LinearOpMode {
             MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, 0));
 
             waitForStart();
-
-
-            Actions.runBlocking(
-                drive.actionBuilder(drive.pose)
-                        .splineTo(new Vector2d(30, 30), Math.PI / 2)
-                        .splineTo(new Vector2d(60, 0), Math.PI)
-                        .build());
-        } else if (TuningOpModes.DRIVE_CLASS.equals(TankDrive.class)) {
-            TankDrive drive = new TankDrive(hardwareMap, new Pose2d(0, 0, 0));
-
-            waitForStart();
+            AUTOlights = hardwareMap.get(RevBlinkinLedDriver.class, "lights");
+            AUTOlights.setPattern(RevBlinkinLedDriver.BlinkinPattern.BREATH_BLUE);
 
             Actions.runBlocking(
                     drive.actionBuilder(drive.pose)
                             .splineTo(new Vector2d(30, 30), Math.PI / 2)
                             .splineTo(new Vector2d(60, 0), Math.PI)
                             .build());
-        } else {
-            throw new AssertionError();
         }
-    }
+            else {
+                throw new AssertionError();
+            }
+        }
 }

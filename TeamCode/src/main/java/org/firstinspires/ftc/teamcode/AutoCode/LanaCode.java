@@ -5,6 +5,7 @@ import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 
 @Autonomous(name="Draw Lana's Name", group="CompetitionAuto")
 public class LanaCode extends AutoSupplies{
+
     public void runOpMode() {
         initLanaAuto();
 
@@ -15,7 +16,7 @@ public class LanaCode extends AutoSupplies{
         //Start programming
 
         //L
-        lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.TWINKLES_FOREST_PALETTE);
+        AUTOlights.setPattern(RevBlinkinLedDriver.BlinkinPattern.TWINKLES_FOREST_PALETTE);
         encoderMove(200,0,1);
         pause(2000);
         turnToS(-90, 0.5, 3);
@@ -24,7 +25,7 @@ public class LanaCode extends AutoSupplies{
         pause(2000);
 
         //A
-        lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_FOREST_PALETTE);
+        AUTOlights.setPattern(RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_FOREST_PALETTE);
         encoderMove(280,-1,1);
         pause(2000);
         encoderMove(140,1,1);
@@ -41,7 +42,7 @@ public class LanaCode extends AutoSupplies{
         pause(2000);
 
         //N
-        lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.RAINBOW_FOREST_PALETTE);
+        AUTOlights.setPattern(RevBlinkinLedDriver.BlinkinPattern.RAINBOW_FOREST_PALETTE);
         turnToS(-90, 0.5, 3);
         pause(2000);
         encoderMove(200,0,1);
@@ -56,7 +57,7 @@ public class LanaCode extends AutoSupplies{
         pause(2000);
 
         //A
-        lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_FOREST_PALETTE);
+        AUTOlights.setPattern(RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_FOREST_PALETTE);
         encoderMove(280,-1,1);
         pause(2000);
         encoderMove(140,1,1);
@@ -73,7 +74,7 @@ public class LanaCode extends AutoSupplies{
         pause(2000);
 
         //Celebrate :D
-        lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.CONFETTI);
+        AUTOlights.setPattern(RevBlinkinLedDriver.BlinkinPattern.CONFETTI);
         turnToS(720, 1, 2);
 
 

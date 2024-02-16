@@ -5,12 +5,11 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 
-import org.firstinspires.ftc.robotcore.external.ClassFactory;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
@@ -31,13 +30,15 @@ public abstract class AutoSupplies extends LinearOpMode{
     protected DcMotor motorBackLeft = null;
     protected DcMotor motorBackRight = null;
 
+    protected DcMotor Intake = null;
+
     protected DcMotor liftLeft = null;
     protected DcMotor liftRight = null;
 
     protected Servo intakeServo = null;
 
 
-    protected RevBlinkinLedDriver lights;
+    protected RevBlinkinLedDriver AUTOlights;
 
     protected BNO055IMU imu;
 
@@ -614,17 +615,17 @@ public abstract class AutoSupplies extends LinearOpMode{
     public void initForAutonomous()
     {
         //Prepares all the hardware
-        motorFwdRight = hardwareMap.get(DcMotor.class, "motorFwdRight");
-        motorBackLeft = hardwareMap.get(DcMotor.class, "motorBackLeft");
-        motorFwdLeft = hardwareMap.get(DcMotor.class, "motorFwdLeft");
-        motorBackRight = hardwareMap.get(DcMotor.class, "motorBackRight");
+        motorFwdRight = hardwareMap.get(DcMotor.class, "rfB");
+        motorBackLeft = hardwareMap.get(DcMotor.class, "lbD");
+        motorFwdLeft = hardwareMap.get(DcMotor.class, "lfD");
+        motorBackRight = hardwareMap.get(DcMotor.class, "rbD");
         motorBackLeft.setDirection(DcMotor.Direction.REVERSE);
         //motorBackRight.setDirection(DcMotor.Direction.REVERSE);
         //motorFwdRight.setDirection(DcMotor.Direction.REVERSE);
 
-        liftLeft = hardwareMap.get(DcMotor.class, "liftLeft");
+        liftLeft = hardwareMap.get(DcMotor.class, "arm_1");
         liftLeft.setDirection(DcMotor.Direction.REVERSE);
-        liftRight = hardwareMap.get(DcMotor.class, "liftRight");
+        liftRight = hardwareMap.get(DcMotor.class, "arm_2");
         liftRight.setDirection(DcMotor.Direction.FORWARD);
 
         resetArmEncoders();
@@ -642,8 +643,9 @@ public abstract class AutoSupplies extends LinearOpMode{
         parameters.loggingEnabled      = false;
 
 
-        intakeServo = hardwareMap.get(Servo.class,"intakeServo");
-        lights = hardwareMap.get(RevBlinkinLedDriver.class, "lights");
+        intakeServo = hardwareMap.get(Servo.class,"servo");
+        Intake = hardwareMap.get(DcMotorEx.class, "intake");
+        AUTOlights = hardwareMap.get(RevBlinkinLedDriver.class, "lights");
 
         // Retrieve and initialize the IMU. We expect the IMU to be attached to an I2C port
         // on a Core Device Interface Module, configured to be a sensor of type "AdaFruit IMU",
@@ -717,7 +719,7 @@ public abstract class AutoSupplies extends LinearOpMode{
         parameters.loggingEnabled      = false;
 
 
-        lights = hardwareMap.get(RevBlinkinLedDriver.class, "lights");
+        AUTOlights = hardwareMap.get(RevBlinkinLedDriver.class, "lights");
 
         // Retrieve and initialize the IMU. We expect the IMU to be attached to an I2C port
         // on a Core Device Interface Module, configured to be a sensor of type "AdaFruit IMU",
