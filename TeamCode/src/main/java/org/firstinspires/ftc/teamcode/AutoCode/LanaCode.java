@@ -7,7 +7,7 @@ import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 public class LanaCode extends AutoSupplies{
 
     public void runOpMode() {
-        initLanaAuto();
+        //initLanaAuto();
 
         telemetry.addData(">", "Press Play to start op mode");
         telemetry.update();
